@@ -17,8 +17,6 @@ char config[3][50] = {};
 bool setup_wifi(String hostname, char ssid[], char password[], int retrys) {
   Serial.print("Connecting to ");
   Serial.println(ssid);
-  Serial.println(password);
-  Serial.println(hostname);
 
   WiFi.mode(WIFI_STA);
   WiFi.persistent(false);
