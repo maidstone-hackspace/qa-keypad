@@ -1,0 +1,13 @@
+{:title "QA Keypad setup"
+ :fields [{:name "server" :title "Server" :placeholder "127.0.0.1"
+           :validator "server-type"
+           :error "Invalid server address"}
+          {:name "device-id" :title "Device Unique ID" :placeholder "AAAA"
+           :validator "device-id-type"
+           :error "Invalid identifier" :focus "true"}
+          {:name "wifi-ssid" :title "WIFI SSID"
+           :validator "wifi-ssid-type"
+           :error "Invalid SSID"}
+          {:name "wifi-key" :title "WIFI Password"
+           :validator "wifi-key-type"
+           :error "Invalid wifi password" :type "password"}]}

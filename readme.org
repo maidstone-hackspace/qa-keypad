@@ -1,0 +1,24 @@
+#+TITLE: Wemos QA keypad
+
+* Device install
+
+To setup a new device you can use the arduino software, you will need a plugin to upload the files in the =data= folder to your wemos device.
+
+https://github.com/esp8266/arduino-esp8266fs-plugin/releases/tag/0.4.0
+
+
+* Device Setup
+
+When switching on the device for the first time it will launch in access point mode to allow you to setup the device, connect to =weeeecfg= from a phone and enter password =weeeecfg= to setup the device. If the device can not connect to a local network it will relaunch the setup interface.
+
+subsequent usage of the device will reuse the same settings as long as the device can connect.
+
+The interfacing is using a simple web interface generated from this repository.
+
+https://gitlab.com/olymk2/weecfg
+
+
+* Later
+** TODO gzip the html
+
+The wemos is by no means fast so gzip so there is less data to send.
