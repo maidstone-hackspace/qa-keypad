@@ -1,7 +1,15 @@
 #include "setup.h"
+#include <ArduinoJson.h>
+#include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
+#include <LiquidCrystal.h>
 #include <WiFiClient.h>
 #include <stdio.h>
+
+// LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
+LiquidCrystal lcd(D2, D3, D5, D6, D7, D8);
+#define LCD_COLUMNS 16
+#define LCD_ROWS 2
 
 // array indexes of form field values
 // these should match the order in form_fields
@@ -45,16 +53,32 @@ bool setup_wifi(String hostname, char ssid[], char password[], int retrys) {
   return false;
 }
 
+void lcd_print(String msg) {
+  lcd.clear();
+  lcd.setCursor(0, 0);
+  lcd.print(msg);
+}
+
 void setup() {
   Serial.begin(115200);
+  lcd.begin(LCD_COLUMNS, LCD_ROWS);
+  lcd_print("Starting Up");
+
   if (config_startup("/config.txt", form_fields, config, number_of_fields) ==
       0) {
     // config loaded
+    lcd_print("Connect to net");
     if (setup_wifi("wemos", config[cfg_wifi_ssid], config[cfg_wifi_key], 20) ==
         false) {
       // could not connect so force access point mode
+      lcd.setCursor(0, 0);
+      lcd.print("Please configure");
+      Serial.println("please configure");
       config_access_point(form_fields, number_of_fields);
     }
+  } else {
+    Serial.println("please access point configure");
+    lcd_print("Connect to access point");
   }
 
   // continue setup here
@@ -62,4 +86,7 @@ void setup() {
 
 void loop() {
   // put actual code here
+  lcd.setCursor(0, 1);
+  // print the number of seconds since reset:
+  lcd.print(millis() / 1000);
 }
