@@ -18,6 +18,82 @@ The interfacing is using a simple web interface generated from this repository.
 https://gitlab.com/olymk2/weecfg
 
 
+* API example
+
+** Keypad startup endpoint
+#+BEGIN_SRC http
+POST http://ng.snapwire-portal.co.uk/api/Startup
+Content-Type: application/json
+
+{"ControllerId": "sample string 1"}
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/8.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Mon, 07 Oct 2019 16:53:52 GMT
+Content-Length: 55
+
+{"ControllerId":"sample string 1","AssignedName":"Bob"}
+#+end_example
+
+** Poll to determine when ready for next answer
+#+BEGIN_SRC http
+POST http://ng.snapwire-portal.co.uk/api/Poll
+Content-Type: application/json
+
+{}
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/8.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Mon, 07 Oct 2019 17:05:12 GMT
+Content-Length: 60
+
+{"Timestamp":132149415123628674,"ReadyToAcceptAnswers":true}
+#+end_example
+
+** Example sending answer to api.
+#+BEGIN_SRC http
+POST http://ng.snapwire-portal.co.uk/api/SubmitAnswer
+Content-Type: application/json
+
+{"ControllerId": "sample string 1", "Answer": "#"}
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+HTTP/1.1 200 OK
+Cache-Control: no-cache
+Pragma: no-cache
+Content-Type: application/json; charset=utf-8
+Expires: -1
+Server: Microsoft-IIS/8.5
+X-AspNet-Version: 4.0.30319
+X-Powered-By: ASP.NET
+Date: Mon, 07 Oct 2019 17:04:35 GMT
+Content-Length: 24
+
+{"ConfirmReceived":true}
+#+end_example
+
+http://ng.snapwire-portal.co.uk/api/SubmitAnswer
+
 * Later
 ** TODO gzip the html
 

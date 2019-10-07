@@ -1,8 +1,9 @@
 #ifndef device_setup_H
 #define device_setup_H
 
-#define CONFIG_MODE_NORMAL 0
-#define CONFIG_MODE_ACCESS_POINT 1
+#define WEECFG_COMPRESSED ".gz"
+#define WEECFG_NORMAL_MODE 0
+#define WEECFG_ACCESS_POINT_MODE 1
 
 
 bool loadConfig(String fileName, char (*config)[50], int number_of_elements);
