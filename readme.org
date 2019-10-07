@@ -19,13 +19,13 @@ https://gitlab.com/olymk2/weecfg
 
 
 * API example
-
+  
 ** Keypad startup endpoint
 #+BEGIN_SRC http
 POST http://ng.snapwire-portal.co.uk/api/Startup
 Content-Type: application/json
 
-{"ControllerId": "sample string 1"}
+{"ControllerId": "DID1"}
 #+END_SRC
 
 #+RESULTS:
@@ -38,10 +38,10 @@ Expires: -1
 Server: Microsoft-IIS/8.5
 X-AspNet-Version: 4.0.30319
 X-Powered-By: ASP.NET
-Date: Mon, 07 Oct 2019 16:53:52 GMT
-Content-Length: 55
+Date: Mon, 07 Oct 2019 18:50:37 GMT
+Content-Length: 44
 
-{"ControllerId":"sample string 1","AssignedName":"Bob"}
+{"ControllerId":"DID1","AssignedName":"Bob"}
 #+end_example
 
 ** Poll to determine when ready for next answer

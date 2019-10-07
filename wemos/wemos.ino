@@ -96,7 +96,7 @@ void setup() {
 }
 
 void loop() {
-  send_payload(API_POLL, config[cfg_device_id]);
+  //send_payload(API_POLL, config[cfg_device_id]);
   // put actual code here
   lcd.setCursor(0, 1);
   // print the number of seconds since reset:
