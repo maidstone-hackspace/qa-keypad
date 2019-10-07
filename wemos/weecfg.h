@@ -1,7 +1,7 @@
 #ifndef device_setup_H
 #define device_setup_H
 
-#define WEECFG_COMPRESSED ".gz"
+#define WEECFG_COMPRESSED ""
 #define WEECFG_NORMAL_MODE 0
 #define WEECFG_ACCESS_POINT_MODE 1
 
