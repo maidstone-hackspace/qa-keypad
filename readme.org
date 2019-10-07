@@ -21,7 +21,7 @@ https://gitlab.com/olymk2/weecfg
 * API example
   
 ** Keypad startup endpoint
-#+BEGIN_SRC http
+#+BEGIN_SRC http :pretty :exports both
 POST http://ng.snapwire-portal.co.uk/api/Startup
 Content-Type: application/json
 
@@ -29,23 +29,13 @@ Content-Type: application/json
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
-HTTP/1.1 200 OK
-Cache-Control: no-cache
-Pragma: no-cache
-Content-Type: application/json; charset=utf-8
-Expires: -1
-Server: Microsoft-IIS/8.5
-X-AspNet-Version: 4.0.30319
-X-Powered-By: ASP.NET
-Date: Mon, 07 Oct 2019 18:50:37 GMT
-Content-Length: 44
-
-{"ControllerId":"DID1","AssignedName":"Bob"}
-#+end_example
+: {
+:   "ControllerId": "DID1",
+:   "AssignedName": "Bob"
+: }
 
 ** Poll to determine when ready for next answer
-#+BEGIN_SRC http
+#+BEGIN_SRC http :pretty :exports both
 POST http://ng.snapwire-portal.co.uk/api/Poll
 Content-Type: application/json
 
@@ -53,23 +43,13 @@ Content-Type: application/json
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
-HTTP/1.1 200 OK
-Cache-Control: no-cache
-Pragma: no-cache
-Content-Type: application/json; charset=utf-8
-Expires: -1
-Server: Microsoft-IIS/8.5
-X-AspNet-Version: 4.0.30319
-X-Powered-By: ASP.NET
-Date: Mon, 07 Oct 2019 17:05:12 GMT
-Content-Length: 60
-
-{"Timestamp":132149415123628674,"ReadyToAcceptAnswers":true}
-#+end_example
+: {
+:   "Timestamp": 132149528062145583,
+:   "ReadyToAcceptAnswers": true
+: }
 
 ** Example sending answer to api.
-#+BEGIN_SRC http
+#+BEGIN_SRC http :pretty :exports both
 POST http://ng.snapwire-portal.co.uk/api/SubmitAnswer
 Content-Type: application/json
 
@@ -77,20 +57,9 @@ Content-Type: application/json
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
-HTTP/1.1 200 OK
-Cache-Control: no-cache
-Pragma: no-cache
-Content-Type: application/json; charset=utf-8
-Expires: -1
-Server: Microsoft-IIS/8.5
-X-AspNet-Version: 4.0.30319
-X-Powered-By: ASP.NET
-Date: Mon, 07 Oct 2019 17:04:35 GMT
-Content-Length: 24
-
-{"ConfirmReceived":true}
-#+end_example
+: {
+:   "ConfirmReceived": true
+: }
 
 http://ng.snapwire-portal.co.uk/api/SubmitAnswer
 
