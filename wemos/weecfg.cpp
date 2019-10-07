@@ -4,7 +4,7 @@
 #include <DNSServer.h>
 #include <ESP8266WiFi.h>
 #include <FS.h>
-#include <WiFiClient.h>
+//#include <WiFiClient.h>
 #include <stdio.h>
 
 bool weecfg_compressed = "";

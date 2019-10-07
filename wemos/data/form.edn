@@ -1,5 +1,5 @@
 {:title "QA Keypad setup"
- :fields [{:name "server" :title "Server" :placeholder "127.0.0.1"
+ :fields [{:name "server" :title "Server" :placeholder "http://ng.snapwire-portal.co.uk/api/"
            :validator "server-type"
            :error "Invalid server address"}
           {:name "device-id" :title "Device Unique ID" :placeholder "AAAA"
