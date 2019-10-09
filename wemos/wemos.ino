@@ -1,12 +1,9 @@
 #include "weecfg.h"
 #include "qaapi.h"
 #include "wemos.h"
-
-//#include <ArduinoJson.h>
-//#include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
+#include <ArduinoJson.h>
 #include <LiquidCrystal.h>
-//#include <WiFiClient.h>
 #include <stdio.h>
 
 // LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -25,15 +22,12 @@ const char *form_fields[] = {"device-id", "wifi-ssid", "wifi-key", "server"};
 int number_of_fields = 3; // total form fields minus 1 because zero based arrays
 char config[3][50] = {};
 
-
-// Route to actually store the config file.
-// server.on("/question", HTTP_GET,
-//          [](AsyncWebServerRequest *request) { Serial.println(request); });
-
+bool qa_state = false;
+int qa_timestamp = 0;
+char qa_key = 0;
 
 
 bool setup_wifi(String hostname, char ssid[], char password[], int retrys) {
-
   Serial.print("Connecting to ");
   Serial.println(ssid);
 
@@ -91,16 +85,47 @@ void setup() {
     return;
   }
   lcd_print("Connected.");
-  send_payload(API_STARTUP, config[cfg_device_id]);
+
+  DynamicJsonDocument doc =  send_payload(API_STARTUP, config[cfg_device_id], ' ', 0);
+  const char* controller_id = doc["ControllerId"];
+  const char* users_name = doc["AssignedName"];
+  Serial.println("started recieved data");
+  Serial.println(controller_id);
+  Serial.println(users_name);
   // continue setup here
 }
 
 void loop() {
-  //send_payload(API_POLL, config[cfg_device_id]);
+  DynamicJsonDocument doc = send_payload(API_POLL, config[cfg_device_id], ' ', 0);
+  qa_state = doc["ReadyToAcceptAnswers"];
+  qa_timestamp = doc["Timestamp"];
+  Serial.println("Poll");
+  Serial.println(qa_state);
+  Serial.println(qa_timestamp);
+  //Serial.println(users_name);
+
+  //get char from keypad
+  char key = 'A'; //choce();
+
+  if((bool)qa_state == false) {
+    key = ' ';
+    qa_key = ' ';
+  }
+
+
+  if ((bool)qa_state==true && key != qa_key && key!=' '){
+    Serial.println("Sending");
+    key = qa_key;
+    DynamicJsonDocument doc = send_payload(API_ANSWER, config[cfg_device_id], qa_key, 0);
+  }
+
   // put actual code here
   lcd.setCursor(0, 1);
   // print the number of seconds since reset:
   lcd.print(millis() / 1000);
-  delay(1000); // one second
+
+  //work out time passed instead of delay
+  delay(ONE_SECOND); // one second
+  qa_timestamp += ONE_SECOND;
   
 }

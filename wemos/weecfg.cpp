@@ -1,6 +1,7 @@
 #include "ESPAsyncWebServer.h"
 //#include <ESP8266WebServer.h>
 #include "weecfg.h"
+#include <ArduinoJson.h>
 #include <DNSServer.h>
 #include <ESP8266WiFi.h>
 #include <FS.h>

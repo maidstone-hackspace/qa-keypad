@@ -1,6 +1,7 @@
 #ifndef qaapi_H
 #define qaapi_H
+#include <ArduinoJson.h>
 
-void send_payload(String url, char *deviceid);
+DynamicJsonDocument send_payload(String url, char *deviceid, char answer, int time);
 
 #endif
