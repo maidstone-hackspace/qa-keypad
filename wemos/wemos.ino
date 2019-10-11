@@ -5,11 +5,12 @@
 #include <ArduinoJson.h>
 #include <LiquidCrystal.h>
 #include <stdio.h>
+#include "weekeypad.h"
+#include "weelcd.h"
+
 
 // LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-LiquidCrystal lcd(D2, D3, D5, D6, D7, D8);
-#define LCD_COLUMNS 16
-#define LCD_ROWS 2
+//LiquidCrystal lcd(D2, D3, D5, D6, D7, D8);
 
 // array indexes of form field values
 // these should match the order in form_fields
@@ -66,8 +67,10 @@ void lcd_print(String msg) {
 
 void setup() {
   Serial.begin(115200);
-  lcd.begin(LCD_COLUMNS, LCD_ROWS);
-  lcd_print("Starting Up");
+  lcdSetup();
+  
+  lcd.print("Starting...");
+  delay(2000);
 
   // config_startup will return the mode it started in
   // either AP or normal mode
@@ -80,7 +83,7 @@ void setup() {
   // config loaded
   if (setup_wifi("wemos", config[cfg_wifi_ssid], config[cfg_wifi_key], 20) ==
       false) {
-    // wifi connection failed fal back to access point mode
+    // wifi connection failed fall back to access point mode
     config_access_point(form_fields, number_of_fields);
     return;
   }
@@ -127,5 +130,4 @@ void loop() {
   //work out time passed instead of delay
   delay(ONE_SECOND); // one second
   qa_timestamp += ONE_SECOND;
-  
 }
