@@ -8,10 +8,6 @@
 #include "weekeypad.h"
 #include "weelcd.h"
 
-
-// LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
-//LiquidCrystal lcd(D2, D3, D5, D6, D7, D8);
-
 // array indexes of form field values
 // these should match the order in form_fields
 #define cfg_device_id 0
@@ -25,8 +21,14 @@ char config[3][50] = {};
 
 bool qa_state = false;
 int qa_timestamp = 0;
-char qa_key = 0;
+char qa_key = ' ';
+// char users_name[12] = "";
+char users_name[12] = "";
+char controller_id[12] = "";
 
+char qa_counter_string[7];
+int qa_counter = 0;
+int qa_counter_start = 0;
 
 bool setup_wifi(String hostname, char ssid[], char password[], int retrys) {
   Serial.print("Connecting to ");
@@ -65,10 +67,16 @@ void lcd_print(String msg) {
   lcd.print(msg);
 }
 
+void lcd_print_bottom(String msg) {
+  // lcd.clear();
+  lcd.setCursor(0, 1);
+  lcd.print(msg);
+}
+
 void setup() {
   Serial.begin(115200);
   lcdSetup();
-  
+
   lcd.print("Starting...");
   delay(2000);
 
@@ -89,45 +97,64 @@ void setup() {
   }
   lcd_print("Connected.");
 
-  DynamicJsonDocument doc =  send_payload(API_STARTUP, config[cfg_device_id], ' ', 0);
-  const char* controller_id = doc["ControllerId"];
-  const char* users_name = doc["AssignedName"];
-  Serial.println("started recieved data");
-  Serial.println(controller_id);
-  Serial.println(users_name);
-  // continue setup here
+  DynamicJsonDocument doc = send_payload(API_STARTUP, config[cfg_device_id], ' ', 0);
+  strcpy(controller_id, (const char *)doc["ControllerId"]);
+  strcpy(users_name, (const char *)doc["AssignedName"]);
 }
 
 void loop() {
-  DynamicJsonDocument doc = send_payload(API_POLL, config[cfg_device_id], ' ', 0);
-  qa_state = doc["ReadyToAcceptAnswers"];
-  qa_timestamp = doc["Timestamp"];
-  Serial.println("Poll");
-  Serial.println(qa_state);
-  Serial.println(qa_timestamp);
-  //Serial.println(users_name);
+  qa_counter = millis() / 1000;
+  if (qa_counter_start != qa_counter) {
+    DynamicJsonDocument doc =
+        send_payload(API_POLL, config[cfg_device_id], ' ', 0);
+    qa_state = (bool)doc["ReadyToAcceptAnswers"];
+    qa_timestamp = doc["Timestamp"];
+    /* Serial.println("sending"); */
+    /* Serial.println(qa_state); */
+    /* Serial.println(qa_timestamp); */
+    /* Serial.println(qa_key); */
+    lcd_print(users_name);
+    lcd_print_bottom(String(qa_key));
+    qa_counter_start = qa_counter;
+    qa_timestamp += ONE_SECOND;
+  }
 
-  //get char from keypad
-  char key = 'A'; //choce();
+  /* Serial.println("Poll"); */
+  /* Serial.println(qa_state); */
+  /* Serial.println(qa_timestamp); */
+  // Serial.println(users_name);
 
-  if((bool)qa_state == false) {
+  // get char from keypad
+  char key = customKeypad.getKey();
+  // Serial.println(key);
+
+  if ((bool)qa_state == false) {
     key = ' ';
     qa_key = ' ';
   }
 
+  // if ((bool)qa_state==true && key != qa_key && key!=' '){
 
-  if ((bool)qa_state==true && key != qa_key && key!=' '){
+  if (key != NULL && key != ' ') {
+    //if (key != NULL && key != qa_key && key != ' ') {
     Serial.println("Sending");
-    key = qa_key;
-    DynamicJsonDocument doc = send_payload(API_ANSWER, config[cfg_device_id], qa_key, 0);
+    Serial.println(String(key));
+    Serial.println(String(qa_key));
+
+    //strcpy(qa_key, (const char*)key);
+
+    qa_key = key;
+    // DynamicJsonDocument doc =
+    //    send_payload(API_ANSWER, config[cfg_device_id], qa_key, qa_timestamp);
+    //} else {
+    // lcd_print_bottom(String(qa_state));
   }
 
-  // put actual code here
-  lcd.setCursor(0, 1);
-  // print the number of seconds since reset:
-  lcd.print(millis() / 1000);
+  // run time counter
+  // lcd_print_bottom(itoa((millis() / 1000), qa_counter, 10));
 
-  //work out time passed instead of delay
-  delay(ONE_SECOND); // one second
-  qa_timestamp += ONE_SECOND;
+  // work out time passed instead of delay
+  // delay(ONE_SECOND); // one second
+
+  delay(1);
 }

@@ -5,7 +5,9 @@
 DynamicJsonDocument send_payload(String url, char *deviceid, char answer,
                                  int time) {
   StaticJsonDocument<200> doc;
-  Serial.println(url);
+  //Serial.println(url);
+  //Serial.println();
+
   // doc["time"] = 1351824120;
 
   // Build json object with available data
@@ -18,7 +20,6 @@ DynamicJsonDocument send_payload(String url, char *deviceid, char answer,
   }
 
   serializeJson(doc, Serial);
-  Serial.println();
   serializeJsonPretty(doc, Serial);
 
   char JSONmessageBuffer[200];
@@ -33,9 +34,9 @@ DynamicJsonDocument send_payload(String url, char *deviceid, char answer,
   int httpCode = http.POST(JSONmessageBuffer); // Send the request
   String payload = http.getString();           // Get the response payload
 
-  Serial.println("response"); // Print HTTP return code
-  Serial.println(httpCode);   // Print HTTP return code
-  Serial.println(payload);    // Print request response payload
+  //Serial.println("response"); // Print HTTP return code
+  //Serial.println(httpCode);   // Print HTTP return code
+  //Serial.println(payload);    // Print request response payload
 
   // computed from here arduinojson.org/v6/assistant
   const size_t capacity = JSON_OBJECT_SIZE(2) + 60;
