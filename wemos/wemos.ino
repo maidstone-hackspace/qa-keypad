@@ -1,12 +1,12 @@
-#include "weecfg.h"
-#include "qaapi.h"
-#include "wemos.h"
-#include <ESP8266WiFi.h>
 #include <ArduinoJson.h>
+#include <ESP8266WiFi.h>
 #include <LiquidCrystal.h>
 #include <stdio.h>
+#include "qaapi.h"
+#include "weecfg.h"
 #include "weekeypad.h"
 #include "weelcd.h"
+#include "wemos.h"
 
 // array indexes of form field values
 // these should match the order in form_fields
@@ -19,13 +19,16 @@ const char *form_fields[] = {"device-id", "wifi-ssid", "wifi-key", "server"};
 int number_of_fields = 3; // total form fields minus 1 because zero based arrays
 char config[3][50] = {};
 
-bool qa_state = false;
+bool qa_state_ready = false;
 int qa_timestamp = 0;
-char qa_key = ' ';
+char qa_key[1] = "";
+char qa_last_key[1] = "";
 // char users_name[12] = "";
 char users_name[12] = "";
 char controller_id[12] = "";
 
+char qa_lcd_top[16] = "";
+char qa_lcd_bottom[16] = "";
 char qa_counter_string[7];
 int qa_counter = 0;
 int qa_counter_start = 0;
@@ -97,58 +100,81 @@ void setup() {
   }
   lcd_print("Connected.");
 
-  DynamicJsonDocument doc = send_payload(API_STARTUP, config[cfg_device_id], ' ', 0);
+  DynamicJsonDocument doc =
+      send_payload(API_STARTUP, config[cfg_device_id], ' ', 0);
   strcpy(controller_id, (const char *)doc["ControllerId"]);
   strcpy(users_name, (const char *)doc["AssignedName"]);
 }
 
+void redraw(String top, String bottom){
+  lcd_print(top);
+  lcd_print_bottom(bottom);
+}
+
 void loop() {
   qa_counter = millis() / 1000;
+  // get char from keypad
+  qa_key[0] = customKeypad.getKey();
+
+  //reset everything
+  if(qa_state_ready==0){
+    qa_key[0]=NULL;
+    qa_last_key[0]=NULL;
+  }
+
   if (qa_counter_start != qa_counter) {
     DynamicJsonDocument doc =
-        send_payload(API_POLL, config[cfg_device_id], ' ', 0);
-    qa_state = (bool)doc["ReadyToAcceptAnswers"];
-    qa_timestamp = doc["Timestamp"];
-    /* Serial.println("sending"); */
-    /* Serial.println(qa_state); */
-    /* Serial.println(qa_timestamp); */
-    /* Serial.println(qa_key); */
-    lcd_print(users_name);
-    lcd_print_bottom(String(qa_key));
+         send_payload(API_POLL, config[cfg_device_id], ' ', 0);
+    qa_state_ready = (bool)doc["ReadyToAcceptAnswers"];
+    qa_timestamp = doc["Timestamp"]; 
+
     qa_counter_start = qa_counter;
     qa_timestamp += ONE_SECOND;
+
+    if(qa_state_ready==1){
+      if(qa_last_key[0]){
+    Serial.println("--last key");
+    Serial.println(qa_last_key);
+        strcpy(qa_lcd_bottom, qa_last_key);
+      }else{
+        strcpy(qa_lcd_bottom, (const char *)"Press answer.");
+      }
+    }
+    if(qa_state_ready==0){
+      strcpy(qa_lcd_bottom, (const char *)"Locked waiting...");
+    }
+
+    Serial.println("++++++");
+    Serial.println(qa_lcd_bottom);
+    redraw((String)users_name,(String)qa_lcd_bottom);
   }
 
-  /* Serial.println("Poll"); */
-  /* Serial.println(qa_state); */
-  /* Serial.println(qa_timestamp); */
-  // Serial.println(users_name);
-
-  // get char from keypad
-  char key = customKeypad.getKey();
-  // Serial.println(key);
-
-  if ((bool)qa_state == false) {
-    key = ' ';
-    qa_key = ' ';
+  // if a key is pressed work out what todo
+  if (qa_key[0]) {
+    if(qa_state_ready==1){
+      strcpy(qa_last_key, qa_key);
+      strcpy(qa_lcd_bottom, qa_last_key);
+      redraw((String)users_name,(String)qa_lcd_bottom);
+      DynamicJsonDocument doc =
+        send_payload(API_ANSWER, config[cfg_device_id], qa_key[0], qa_timestamp);
+    }
   }
 
-  // if ((bool)qa_state==true && key != qa_key && key!=' '){
 
-  if (key != NULL && key != ' ') {
-    //if (key != NULL && key != qa_key && key != ' ') {
-    Serial.println("Sending");
-    Serial.println(String(key));
-    Serial.println(String(qa_key));
+  /* if ((bool)qa_state_ready == false) { */
+  /*   key = ' '; */
+  /*   qa_key = ' '; */
+  /* } */
 
-    //strcpy(qa_key, (const char*)key);
+  // if ((bool)qa_state_ready==true && key != qa_key && key!=' '){
 
-    qa_key = key;
+
+    // strcpy(qa_key, (const char*)key);
+
     // DynamicJsonDocument doc =
     //    send_payload(API_ANSWER, config[cfg_device_id], qa_key, qa_timestamp);
     //} else {
-    // lcd_print_bottom(String(qa_state));
-  }
+    // lcd_print_bottom(String(qa_state_ready));
 
   // run time counter
   // lcd_print_bottom(itoa((millis() / 1000), qa_counter, 10));
