@@ -4,12 +4,15 @@
 
 To setup a new device you can use the arduino software, you will need a plugin to upload the files in the =data= folder to your wemos device.
 
+** Deploy requirements
 https://github.com/esp8266/arduino-esp8266fs-plugin/releases/tag/0.4.0
 
+** Build Requirements
 You will also need various 3rd party libaries.
 keypad.h 3.1.1 by Mark Stanley, Alexander Brevig https://wiring.uniandes.edu.co/source/trunk/wiring/
 LiquidCrystal I2C by frank de Bradander https://github.com/johnrickman/LiquidCrystal_I2C
-
+ESPAsyncWebServer https://github.com/me-no-dev/ESPAsyncWebServer/archive/master.zip
+Extract and copy to arduino libries folder
 
 * Device Setup
 
@@ -21,9 +24,7 @@ The interfacing is using a simple web interface generated from this repository.
 
 https://gitlab.com/olymk2/weecfg
 
-
 * API example
-  
 ** Keypad startup endpoint
 #+BEGIN_SRC http :pretty :exports both
 POST http://ng.snapwire-portal.co.uk/api/Startup
