@@ -79,8 +79,7 @@ void lcd_print_bottom(String msg) {
 void setup() {
   Serial.begin(115200);
   lcdSetup();
-
-  lcd.print("Starting...");
+  lcd_print("Starting...");
   delay(2000);
 
   // config_startup will return the mode it started in

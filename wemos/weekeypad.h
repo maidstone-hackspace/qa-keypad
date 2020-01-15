@@ -1,4 +1,11 @@
+#ifndef weekeypad_setup_H
+#define weekeypad_setup_H
+
 #include <Keypad.h>
+
+
+char char_map[] = " ABCDEFGHIJKL";
+const int analogInPin = A0;  // ESP8266 Analog Pin ADC0 = A0
 
 char customKey;
 
@@ -17,4 +24,7 @@ byte colPins[COLS] = {D8, D3, D4};
 
 Keypad customKeypad = Keypad(makeKeymap(hexaKeys), rowPins, colPins, ROWS, COLS); 
 
+int read_keypad();
+char read_keypad_character();
 
+#endif
