@@ -25,7 +25,7 @@ char qa_key[1] = "";
 char qa_last_key[1] = "";
 // char users_name[12] = "";
 char users_name[12] = "";
-char controller_id[12] = "";
+char controller_id[40] = "27f9035c-9e8c-4554-9af6-b1a6cbbc4e38";
 
 char qa_lcd_top[16] = "";
 char qa_lcd_bottom[16] = "";
@@ -76,6 +76,11 @@ void lcd_print_bottom(String msg) {
   lcd.print(msg);
 }
 
+void redraw(String top, String bottom){
+  lcd_print(top);
+  lcd_print_bottom(bottom);
+}
+
 void setup() {
   Serial.begin(115200);
   lcdSetup();
@@ -98,20 +103,28 @@ void setup() {
     return;
   }
   lcd_print("Connected.");
-
+  Serial.println(API_STARTUP);
+  Serial.println(config[cfg_device_id]);
+  //config[cfg_device_id]
   DynamicJsonDocument doc =
-      send_payload(API_STARTUP, config[cfg_device_id], ' ', 0);
+    send_payload(API_STARTUP, config[cfg_device_id], ' ', 0);
+    //send_payload(API_STARTUP, "27f9035c-9e8c-4554-9af6-b1a6cbbc4e38", ' ', 0);
+  //strcpy(controller_id, "27f9035c-9e8c-4554-9af6-b1a6cbbc4e38");
   strcpy(controller_id, (const char *)doc["ControllerId"]);
   strcpy(users_name, (const char *)doc["AssignedName"]);
+  //redraw((String)users_name,(String)"hi");
+
 }
 
-void redraw(String top, String bottom){
-  lcd_print(top);
-  lcd_print_bottom(bottom);
-}
+/* void redraw(String top, String bottom){ */
+/*   lcd_print(top); */
+/*   lcd_print_bottom(bottom); */
+/* } */
 
 void loop() {
   qa_counter = millis() / 1000;
+  //  lcd_print(qa_counter);
+
   // get char from keypad
   qa_key[0] = customKeypad.getKey();
 
@@ -122,6 +135,8 @@ void loop() {
   }
 
   if (qa_counter_start != qa_counter) {
+      Serial.println(API_POLL);
+
     DynamicJsonDocument doc =
          send_payload(API_POLL, config[cfg_device_id], ' ', 0);
     qa_state_ready = (bool)doc["ReadyToAcceptAnswers"];
@@ -130,12 +145,16 @@ void loop() {
     qa_counter_start = qa_counter;
     qa_timestamp += ONE_SECOND;
 
+    //Serial.println(doc["ReadyToAcceptAnswers"]);
+    Serial.println(qa_state_ready);
+
     if(qa_state_ready==1){
       if(qa_last_key[0]){
     Serial.println("--last key");
     Serial.println(qa_last_key);
         strcpy(qa_lcd_bottom, qa_last_key);
       }else{
+        Serial.println("qa press answer");
         strcpy(qa_lcd_bottom, (const char *)"Press answer.");
       }
     }
@@ -154,6 +173,9 @@ void loop() {
       strcpy(qa_last_key, qa_key);
       strcpy(qa_lcd_bottom, qa_last_key);
       redraw((String)users_name,(String)qa_lcd_bottom);
+      Serial.println("Answer here ----");
+      Serial.println(API_ANSWER);
+
       DynamicJsonDocument doc =
         send_payload(API_ANSWER, config[cfg_device_id], qa_key[0], qa_timestamp);
     }

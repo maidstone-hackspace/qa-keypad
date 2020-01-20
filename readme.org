@@ -24,6 +24,14 @@ The interfacing is using a simple web interface generated from this repository.
 
 https://gitlab.com/olymk2/weecfg
 
+
+
+
+
+#+RESULTS:
+: None
+
+
 * API example
 ** Keypad startup endpoint
 #+BEGIN_SRC http :pretty :exports both
@@ -58,7 +66,7 @@ Content-Type: application/json
 POST http://ng.snapwire-portal.co.uk/api/SubmitAnswer
 Content-Type: application/json
 
-{"ControllerId": "sample string 1", "Answer": "#"}
+{"ControllerId": "sample string 1", "Answer": "A"}
 #+END_SRC
 
 #+RESULTS:
@@ -66,9 +74,11 @@ Content-Type: application/json
 :   "ConfirmReceived": true
 : }
 
+
 http://ng.snapwire-portal.co.uk/api/SubmitAnswer
 
 * Later
 ** TODO gzip the html
 
 The wemos is by no means fast so gzip so there is less data to send.
+** TODO http error message on api failure.

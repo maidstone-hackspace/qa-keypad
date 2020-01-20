@@ -1,4 +1,9 @@
 #include "weekeypad.h"
+#include <ESP8266WiFi.h>
+
+
+char char_map[] = " ABCDEFGHIJKL";
+const int analogInPin=A0;
 
 int read_keypad() {
   int reading = 0;
