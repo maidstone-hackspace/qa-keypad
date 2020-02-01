@@ -914,16 +914,6 @@ F 3 "~" H 2400 3850 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Connection ~ 2400 3850
-Wire Bus Line
-	10050 1900 10050 3850
-Wire Bus Line
-	5400 2700 5400 4000
-Wire Bus Line
-	6750 4000 6750 5250
-Wire Bus Line
-	6800 1650 6800 3550
-Wire Bus Line
-	8250 1650 8250 3850
 Text Label 5150 2600 0    50   ~ 0
 KP7
 Text Label 5150 2900 0    50   ~ 0
@@ -934,4 +924,24 @@ Text Label 2400 3850 0    50   ~ 0
 V+2
 Text Label 1450 4500 0    50   ~ 0
 Batt-
+Wire Notes Line
+	5900 1400 8100 1400
+Wire Notes Line
+	8100 1400 8100 3750
+Wire Notes Line
+	8100 3750 5900 3750
+Wire Notes Line
+	5900 3750 5900 1400
+Wire Bus Line
+	10050 1900 10050 3850
+Wire Bus Line
+	5400 2700 5400 4000
+Wire Bus Line
+	6750 4000 6750 5250
+Wire Bus Line
+	6800 1650 6800 3550
+Wire Bus Line
+	8250 1650 8250 3850
+Text Notes 6550 1350 0    50   ~ 0
+I2C -> 16x2 LCD adaptor
 $EndSCHEMATC

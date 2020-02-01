@@ -929,9 +929,9 @@ KP7
 Text Label 5150 2900 0    50   ~ 0
 KP2
 Text Label 1850 3950 0    50   ~ 0
-Batt1
+V+1
 Text Label 2400 3850 0    50   ~ 0
-Batt2
+V+2
 Text Label 1450 4500 0    50   ~ 0
 Batt-
 $EndSCHEMATC
