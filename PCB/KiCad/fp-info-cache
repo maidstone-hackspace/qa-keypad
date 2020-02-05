@@ -1,4 +1,4 @@
-15943443292110431
+15945023591943384
 Battery
 BatteryHolder_Bulgin_BX0036_1xC
 Bulgin Battery Holder, BX0036, Battery Type C (https://www.bulgin.com/products/pub/media/bulgin/data/Battery_holders.pdf)
@@ -48033,6 +48033,13 @@ Keypad
 0
 6
 6
+Keypad
+Mini_Latching_Torch_Switch
+Mini Latching On-Off Torch Switch
+
+0
+2
+2
 Keypad
 MT3608_module
 

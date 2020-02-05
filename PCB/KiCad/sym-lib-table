@@ -1,3 +1,4 @@
 (sym_lib_table
   (lib (name New_Library)(type Legacy)(uri ${KIPRJMOD}/New_Library.lib)(options "")(descr ""))
+  (lib (name adc)(type Legacy)(uri "C:/Users/Alex/Google Drive/Electronics/Keypad/Keypad/Analog_ADC.lib")(options "")(descr ""))
 )
