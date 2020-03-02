@@ -5,6 +5,7 @@
 To setup a new device you can use the arduino software, you will need a plugin to upload the files in the =data= folder to your wemos device.
 
 ** Deploy requirements
+https://github.com/esp8266/Arduino.git
 https://github.com/esp8266/arduino-esp8266fs-plugin/releases/tag/0.4.0
 
 ** Build Requirements
