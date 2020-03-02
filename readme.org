@@ -11,8 +11,13 @@ https://github.com/esp8266/arduino-esp8266fs-plugin/releases/tag/0.4.0
 ** Build Requirements
 You will also need various 3rd party libaries.
 keypad.h 3.1.1 by Mark Stanley, Alexander Brevig https://wiring.uniandes.edu.co/source/trunk/wiring/
+
 LiquidCrystal I2C by frank de Bradander https://github.com/johnrickman/LiquidCrystal_I2C
+
 ESPAsyncWebServer https://github.com/me-no-dev/ESPAsyncWebServer/archive/master.zip
+
+ESPAsyncTCP https://github.com/me-no-dev/ESPAsyncTCP
+
 Extract and copy to arduino libries folder
 
 * Device Setup
